@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Map srs="+init=epsg:3857" background-color="steelblue">
+
+    <Style name="style">
+        <Rule>
+            <PointSymbolizer/>
+        </Rule>
+    </Style>
+
+    <Layer name="world" srs="+init=epsg:4326">
+        <StyleName>style</StyleName>
+        <Datasource>
+            <Parameter name="type">postgis</Parameter>
+            <Parameter name="host">192.168.1.103</Parameter>
+            <Parameter name="dbname">chinamap</Parameter>
+            <Parameter name="user">sde</Parameter>
+            <Parameter name="password">sde</Parameter>
+            <Parameter name="table">country_point</Parameter>
+            <Parameter name="geometry_field">geom</Parameter>
+        </Datasource>
+    </Layer>
+
+</Map>
