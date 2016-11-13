@@ -9,9 +9,13 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "canvas": "^1.6.2",
+    "gl": "^4.0.2",
     "mapnik": "^3.5.13",
     "mapnik-vector-tile": "^1.2.1",
+    "pngjs": "^3.0.0",
     "protozero": "^1.4.1",
-    "sphericalmercator": "^1.0.5"
+    "sphericalmercator": "^1.0.5",
+    "three": "^0.82.1"
   }
 }
