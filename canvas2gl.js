@@ -40,7 +40,7 @@ let render = (dataTexture) => {
     varying vec2 vUv;
     void main() {
         vUv = uv;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        gl_Position = vec4(position, 1.0);
     }
     `;
     material.fragmentShader = `
@@ -101,6 +101,7 @@ let canvas2gl = (canvas) => {
     let imageData = ctx.getImageData(0, 0, width, height);
     let data = imageData.data;
     let dataTexture = new THREE.DataTexture(data, width, height, THREE.RGBAFormat);
+    dataTexture.needsUpdate = true;
     let gl = render(dataTexture);
 
     output(gl);
