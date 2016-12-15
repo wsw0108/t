@@ -16,19 +16,25 @@ class A {
         proto._initHooks.push(init)
     }
     callInitHooks() {
+        const proto = Object.getPrototypeOf(this)
+        this._callHooks(proto)
+    }
+    _callHooks(proto) {
         // TODO: this???
         if (this._initHooksCalled) {
             return
+        }        
+        // const proto = Object.getPrototypeOf(this)
+        const parentProto = Object.getPrototypeOf(proto)
+        if (parentProto._initHooks) {
+            parentProto._callHooks.call(this, parentProto)
         }
         this._initHooksCalled = true
-        const proto = Object.getPrototypeOf(this)
-        const parentProto = Object.getPrototypeOf(proto)
-        if (parentProto.callInitHooks) {
-            parentProto.callInitHooks.call(this)
-        }
         const hooks = proto._initHooks
-        for (let i = 0; i < hooks.length; i++) {
-            hooks[i].call(this)
+        if (hooks) {
+            for (let i = 0; i < hooks.length; i++) {
+                hooks[i].call(this)
+            }
         }
     }
 }
