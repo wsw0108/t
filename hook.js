@@ -17,17 +17,15 @@ class A {
     }
     callInitHooks() {
         const proto = Object.getPrototypeOf(this)
-        this._callHooks(proto)
+        this._traverseInitHooks(proto)
     }
-    _callHooks(proto) {
-        // TODO: this???
+    _traverseInitHooks(proto) {
         if (this._initHooksCalled) {
             return
-        }        
-        // const proto = Object.getPrototypeOf(this)
+        }
         const parentProto = Object.getPrototypeOf(proto)
         if (parentProto._initHooks) {
-            parentProto._callHooks.call(this, parentProto)
+            parentProto._traverseInitHooks.call(this, parentProto)
         }
         this._initHooksCalled = true
         const hooks = proto._initHooks
@@ -43,7 +41,6 @@ class B extends A {
         super()
         // this.handlers = []
         console.log('B.constructor')
-        console.log(B.prototype._initHooks.join())   
     }
     addHandler(name) {
         if (!this.handlers) {
@@ -58,7 +55,6 @@ class C extends B {
         super()
         // this.handlers = []
         console.log('C.constructor')
-        console.log(C.prototype._initHooks.join())
     }
     addHandlerC(name) {
         if (!this.handlers) {
