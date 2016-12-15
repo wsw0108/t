@@ -29,7 +29,7 @@ class A {
         }
         this._initHooksCalled = true
         const hooks = proto._initHooks
-        if (hooks) {
+        if (hooks && hooks !== parentProto._initHooks) {
             for (let i = 0; i < hooks.length; i++) {
                 hooks[i].call(this)
             }
@@ -66,15 +66,15 @@ class C extends B {
     cMethod() {}
 }
 A.addInitHook('addHandler', 'h0')
-// B.addInitHook('addHandler', 'h1')
-// C.addInitHook('addHandler', 'h2')
-// C.addInitHook('addHandler', 'h3')
+B.addInitHook('addHandler', 'h1')
+C.addInitHook('addHandler', 'h2')
+C.addInitHook('addHandler', 'h3')
 
-// const a = new A()
+const a = new A()
 const a1 = new A1()
-// const b = new B()
-// const c = new C()
-// console.log('a.handlers', a.handlers)
+const b = new B()
+const c = new C()
+console.log('a.handlers', a.handlers)
 console.log('a1.handlers', a1.handlers)
-// console.log('b.handlers', b.handlers)
-// console.log('c.handlers', c.handlers)
+console.log('b.handlers', b.handlers)
+console.log('c.handlers', c.handlers)
