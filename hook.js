@@ -29,7 +29,7 @@ class A {
     }
     this._initHooksCalled = true
     const hooks = proto._initHooks
-    if (hooks) {
+    if (hooks && hooks !== parentProto._initHooks) {
       for (let i = 0; i < hooks.length; i++) {
         hooks[i].call(this)
       }
@@ -73,9 +73,9 @@ class C extends B {
 
 B.addInitHook('addHandler', 'h1')
 B.addInitHook('addHandlerB')
-C.addInitHook('addHandler', 'h2')
-C.addInitHook('addHandlerB')
-C.addInitHook('addHandlerC', 'h3', 'h4')
+// C.addInitHook('addHandler', 'h2')
+// C.addInitHook('addHandlerB')
+// C.addInitHook('addHandlerC', 'h3', 'h4')
 console.log('B.hooks', B.prototype._initHooks)
 console.log('C.hooks', C.prototype._initHooks)
 
