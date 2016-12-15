@@ -35,6 +35,18 @@ class A {
             }
         }
     }
+    addHandler(name) {
+        if (!this.handlers) {
+            this.handlers = []
+        }
+        this.handlers.push(name)
+    }
+}
+class A1 extends A {
+    constructor() {
+        super()
+        console.log('A1.constructor')
+    }
 }
 class B extends A {
     constructor() {
@@ -42,12 +54,7 @@ class B extends A {
         // this.handlers = []
         console.log('B.constructor')
     }
-    addHandler(name) {
-        if (!this.handlers) {
-            this.handlers = []
-        }
-        this.handlers.push(name)
-    }
+    
     bMethod() {}
 }
 class C extends B {
@@ -56,22 +63,18 @@ class C extends B {
         // this.handlers = []
         console.log('C.constructor')
     }
-    addHandlerC(name) {
-        if (!this.handlers) {
-            this.handlers = []
-        }
-        this.handlers.push(name)
-    }
     cMethod() {}
 }
+A.addInitHook('addHandler', 'h0')
+// B.addInitHook('addHandler', 'h1')
+// C.addInitHook('addHandler', 'h2')
+// C.addInitHook('addHandler', 'h3')
 
-B.addInitHook('addHandler', 'h1')
-C.addInitHook('addHandler', 'h2')
-C.addInitHook('addHandler', 'h3')
-console.log('B.hooks', B.prototype._initHooks)
-console.log('C.hooks', C.prototype._initHooks)
-
-const b = new B()
-const c = new C()
-console.log('b.handlers', b.handlers)
-console.log('c.handlers', c.handlers)
+// const a = new A()
+const a1 = new A1()
+// const b = new B()
+// const c = new C()
+// console.log('a.handlers', a.handlers)
+console.log('a1.handlers', a1.handlers)
+// console.log('b.handlers', b.handlers)
+// console.log('c.handlers', c.handlers)
