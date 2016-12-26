@@ -1,7 +1,10 @@
-export class Handler {
+import Class from './class'
+
+export class Handler extends Class {
   constructor (target) {
-    console.log('handler')
+    super()
     this.target = target
+    console.log('handler')
   }
 }
 

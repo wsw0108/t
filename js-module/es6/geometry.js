@@ -1,7 +1,9 @@
+import Class from './class'
 import GeoJSON from './geojson'
 
-export class Geometry {
+export class Geometry extends Class {
   constructor () {
+    super()
     console.log('geometry')
   }
 }
