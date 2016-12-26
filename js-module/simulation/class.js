@@ -1,4 +1,4 @@
-import Handler from './handler'
+// import Handler from './handler'
 
 const create = Object.create
 
@@ -156,13 +156,13 @@ Class.extend = function (props) {
         if (hasOwn(conf, i)) {
           this.options[i] = conf[i]
           // enable/disable handler
-          if (this[i] && (this[i] instanceof Handler)) {
-            if (conf[i]) {
-              this[i].enable()
-            } else {
-              this[i].disable()
-            }
-          }
+          // if (this[i] && (this[i] instanceof Handler)) {
+          //   if (conf[i]) {
+          //     this[i].enable()
+          //   } else {
+          //     this[i].disable()
+          //   }
+          // }
         }
       }
       // callback when set config
