@@ -227,7 +227,7 @@ const B = maptalks.Class.extend({
     bMethod: function() {}
 });
 
-const C = B.extend({
+const C = maptalks.Class.extend({
     addHandler: function(name) {
         if (!this.handlers) {
             this.handlers = [];
