@@ -3,27 +3,37 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo test",
+    "pretest": "echo pretest",
+    "posttest": "echo posttest",
+    "install": "echo install",
+    "publish": "echo publish",
+    "prepublish": "echo prepublish",
+    "postpublish": "echo postpublish"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
     "canvas": "^1.6.2",
+    "get-ready": "^2.0.1",
     "gl": "^4.0.2",
     "mapnik": "^3.5.13",
     "mapnik-vector-tile": "^1.2.1",
     "pngjs": "^3.0.0",
     "protozero": "^1.4.1",
+    "sendmessage": "^1.1.0",
     "sphericalmercator": "^1.0.5",
     "three": "^0.82.1"
   },
   "devDependencies": {
+    "babel-eslint": "^7.1.1",
     "babel-plugin-transform-es3-member-expression-literals": "^6.8.0",
     "babel-plugin-transform-es3-property-literals": "^6.8.0",
     "babel-plugin-transform-object-set-prototype-of-to-assign": "^6.8.0",
     "babel-plugin-transform-proto-to-assign": "^6.9.0",
     "babel-preset-es2015": "^6.18.0",
-    "babel-preset-stage-2": "^6.18.0"
+    "babel-preset-stage-2": "^6.18.0",
+    "standard": "^9.0.2"
   }
 }
