@@ -34,7 +34,11 @@ class Master extends EventEmitter {
   }
 
   forkService (script) {
-    const service = childprocess.fork(script)
+    const name = path.basename(script)
+    const stdout = fs.openSync(path.join('logs', name + '.stdout'), 'a+')
+    const stderr = fs.openSync(path.join('logs', name + '.stderr'), 'a+')
+    const stdio = ['pipe', stdout, stderr, 'ipc']
+    const service = childprocess.fork(script, ['arg1', 'arg2'], { stdio })
     this.services.set(service.pid, service)
     service.on('message', msg => {
       console.log(`service:${service.pid}: ${msg.data.name}`)
@@ -42,6 +46,8 @@ class Master extends EventEmitter {
     })
     service.once('exit', (code, signal) => {
       console.log(`service:${service.pid} exit with code: ${code} - ${signal}`)
+      fs.close(stdout)
+      fs.close(stderr)
       this.emit('service-exit', { pid: service.pid, code, signal, script })
     })
   }

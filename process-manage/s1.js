@@ -1,7 +1,6 @@
 const http = require('http')
-const path = require('path')
 
-const port = 60002
+const port = 0
 
 const server = http.createServer((req, res) => {
   if (req.url === '/stdout') {
@@ -15,14 +14,7 @@ const server = http.createServer((req, res) => {
 })
 
 server.on('listening', () => {
-  console.log(`server listening on port ${port}`)
-  const pid = process.pid
-  const name = path.basename(__filename)
-  process.send({ action: 'service-start', data: { pid, name } })
+  console.log(`server listening on port ${server.address().port}`)
 })
 
 server.listen(port)
-
-process.once('SIGTERM', () => {
-  process.exit(0)
-})
