@@ -19,15 +19,15 @@ class Master extends EventEmitter {
     this.on('service-start', this.onServiceStart.bind(this))
     this.on('service-exit', this.onServiceExit.bind(this))
 
-    const scripts = fs.readdirSync('services')
-
+    const scripts = this.scripts = fs.readdirSync('services')
     this.serviceCount = scripts.length
-    this.isAllServiceStarted = false
+    this.forkServices()
+  }
+
+  forkServices () {
     this.startSuccessCount = 0
-
     this.services = new Map()
-
-    scripts.forEach(script => {
+    this.scripts.forEach(script => {
       script = path.join(__dirname, 'services', script)
       this.forkService(script)
     })

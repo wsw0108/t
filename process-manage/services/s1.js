@@ -4,6 +4,9 @@ const path = require('path')
 const port = 60001
 
 const server = http.createServer((req, res) => {
+  if (req.url === '/throw') {
+    throw new Error('i am throwing')
+  }
   if (req.url === '/stdout') {
     console.log('console.log')
     process.stdout.write('stdout\r\n')
@@ -25,4 +28,8 @@ server.listen(port)
 
 process.once('SIGTERM', () => {
   process.exit(0)
+})
+
+process.on('uncaughtException', () => {
+  process.exit(99)
 })
