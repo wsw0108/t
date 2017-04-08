@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>gl limits</title>
+</head>
+
+<body>
+  <canvas id="canvas" width="1" height="1"></canvas>
+  <script>
+    const canvas = document.getElementById('canvas')
+    const gl = canvas.getContext('webgl')
+    const limits = {
+      MAX_VERTEX_UNIFORM_VECTORS: 1024,
+      MAX_VARYING_VECTORS: 30,
+      MAX_FRAGMENT_UNIFORM_VECTORS: 1024,
+      MAX_TEXTURE_SIZE: 16384,
+      MAX_VIEWPORT_DIMS: [32767, 32768],
+      MAX_VERTEX_ATTRIBS: 16,
+      MAX_COMBINED_TEXTURE_IMAGE_UNITS: 32,
+      MAX_VERTEX_TEXTURE_IMAGE_UNITS: 16,
+      MAX_TEXTURE_IMAGE_UNITS: 16,
+      MAX_CUBE_MAP_TEXTURE_SIZE: 16384,
+      MAX_RENDERBUFFER_SIZE: 16384
+    }
+    Object.keys(limits).forEach(key => {
+      const limit = gl.getParameter(gl[key])
+      console.log(`${key}: ${limit}`)
+    })
+
+  </script>
+</body>
+
+</html>
