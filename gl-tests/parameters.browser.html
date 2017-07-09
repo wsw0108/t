@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>gl parameters</title>
+  <script src="http://zeptojs.com/zepto.min.js"></script>
+  <style>
+    #result {
+      border: none;
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="canvas" width="1" height="1"></canvas>
+  <div>
+    <textarea id="result"></textarea>
+  </div>
+  <script>
+    const canvas = document.getElementById('canvas')
+    const gl = canvas.getContext('webgl')
+    const limits = {
+      MAX_VERTEX_UNIFORM_VECTORS: 1024,
+      MAX_VARYING_VECTORS: 30,
+      MAX_FRAGMENT_UNIFORM_VECTORS: 1024,
+      MAX_TEXTURE_SIZE: 16384,
+      MAX_VIEWPORT_DIMS: [32767, 32768],
+      MAX_VERTEX_ATTRIBS: 16,
+      MAX_COMBINED_TEXTURE_IMAGE_UNITS: 32,
+      MAX_VERTEX_TEXTURE_IMAGE_UNITS: 16,
+      MAX_TEXTURE_IMAGE_UNITS: 16,
+      MAX_CUBE_MAP_TEXTURE_SIZE: 16384,
+      MAX_RENDERBUFFER_SIZE: 16384
+    }
+    const result = []
+    Object.keys(limits).forEach(key => {
+      const limit = gl.getParameter(gl[key])
+      result.push(`${key}: ${limit}`)
+    })
+    $('#result').attr('rows', result.length)
+    $('#result').text(result.join('\n'))
+  </script>
+</body>
+
+</html>
