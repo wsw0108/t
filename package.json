@@ -18,6 +18,7 @@
     "canvas": "^1.6.2",
     "get-ready": "^2.0.1",
     "gl": "^4.0.2",
+    "log4js": "^1.1.1",
     "mapnik": "^3.5.13",
     "mapnik-vector-tile": "^1.2.1",
     "pngjs": "^3.0.0",
