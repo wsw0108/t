@@ -3,7 +3,6 @@
 
 <head>
   <title>gl parameters</title>
-  <script src="http://zeptojs.com/zepto.min.js"></script>
   <style>
     #result {
       border: none;
@@ -15,7 +14,7 @@
 <body>
   <canvas id="canvas" width="1" height="1"></canvas>
   <div>
-    <textarea id="result"></textarea>
+    <textarea id="result" readonly></textarea>
   </div>
   <script>
     const canvas = document.getElementById('canvas')
@@ -38,8 +37,9 @@
       const limit = gl.getParameter(gl[key])
       result.push(`${key}: ${limit}`)
     })
-    $('#result').attr('rows', result.length)
-    $('#result').text(result.join('\n'))
+    const textarea = document.getElementById('result')
+    textarea.setAttribute('rows', result.length)
+    textarea.innerHTML = result.join('\n')
   </script>
 </body>
 
