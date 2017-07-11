@@ -33,9 +33,9 @@
       MAX_RENDERBUFFER_SIZE: 16384
     }
     const result = []
-    Object.keys(limits).forEach(key => {
+    Object.keys(limits).forEach(function(key) {
       const limit = gl.getParameter(gl[key])
-      result.push(`${key}: ${limit}`)
+      result.push(key + ': ' + limit)
     })
     const textarea = document.getElementById('result')
     textarea.setAttribute('rows', result.length)
