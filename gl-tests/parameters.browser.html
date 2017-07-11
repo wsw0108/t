@@ -4,7 +4,7 @@
 <head>
   <title>gl parameters</title>
   <style>
-    #result {
+    #my-result {
       border: none;
       width: 100%;
     }
@@ -12,13 +12,13 @@
 </head>
 
 <body>
-  <canvas id="canvas" width="1" height="1"></canvas>
+  <canvas id="my-canvas" width="1" height="1"></canvas>
   <div>
-    <textarea id="result" readonly></textarea>
+    <textarea id="my-result" readonly></textarea>
   </div>
   <script>
-    const canvas = document.getElementById('canvas')
-    const gl = canvas.getContext('webgl')
+    const c = document.getElementById('my-canvas')
+    const gl = c.getContext('webgl') || c.getContext('experimental-webgl')
     const limits = {
       MAX_VERTEX_UNIFORM_VECTORS: 1024,
       MAX_VARYING_VECTORS: 30,
@@ -37,7 +37,7 @@
       const limit = gl.getParameter(gl[key])
       result.push(key + ': ' + limit)
     })
-    const textarea = document.getElementById('result')
+    const textarea = document.getElementById('my-result')
     textarea.setAttribute('rows', result.length)
     textarea.innerHTML = result.join('\n')
   </script>
