@@ -12,20 +12,18 @@
     const c = document.getElementById('my-canvas')
     const gl = c.getContext('webgl') || c.getContext('experimental-webgl')
 
-    const vertexSrc = `
-    attribute vec2 a_position;
+    const vertexSrc = '' +
+    '\nattribute vec2 a_position;' +
+    '\n' +
+    '\nvoid main() {' +
+      '\ngl_Position = vec4(a_position, 0, 1);' +
+      '\ngl_PointSize = 50.0;' +
+    '\n}'
 
-    void main() {
-      gl_Position = vec4(a_position, 0, 1);
-      gl_PointSize = 50.0;
-    }
-    `
-
-    const fragmentSrc = `
-    void main() {
-      gl_FragColor = vec4(1, 0, 0, 1);  // green
-    }
-    `
+    const fragmentSrc = '' +
+    '\nvoid main() {' +
+      '\ngl_FragColor = vec4(1, 0, 0, 1);  // red' +
+    '\n}'
 
     // setup a GLSL program
     const program = createProgramFromSources(gl, [vertexSrc, fragmentSrc])
