@@ -2,7 +2,7 @@ package: points
 import:
 - package: github.com/go-gl/gl
   subpackages:
-  - v4.1-core/gl
+  - v3.3-core/gl
 - package: github.com/go-gl/glfw
   subpackages:
   - v3.2/glfw
