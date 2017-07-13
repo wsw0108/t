@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Dynamic2 Demo</title>
+  <script type="text/javascript" src="https://unpkg.co/maptalks@0.26.3/dist/maptalks.js"></script>
+  <link type="text/css" rel="stylesheet" href="https://unpkg.co/maptalks@0.26.3/dist/maptalks.css">
+  <script type="text/javascript" src="https://unpkg.co/maptalks.mapresty@0.1.1/dist/maptalks.mapresty.js"></script>
+  <style>
+    html,
+    body {
+      margin: 0px;
+      height: 100%;
+      width: 100%;
+    }
+
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div id="map"></div>
+  <script>
+    var noop = function () {};
+
+    function getQueryParams(qs) {
+      qs = qs.split('+').join(' ');
+
+      var params = {},
+        tokens,
+        re = /[?&]?([^=]+)=([^&]*)/g;
+
+      while (tokens = re.exec(qs)) {
+        params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+      }
+
+      return params;
+    }
+
+    var params = getQueryParams(document.location.search);
+    var type = params.type || 'point';
+    if (type !== 'point' && type !== 'vector') {
+      type = 'point';
+    }
+    document.title = type + ' - ' + document.title;
+
+    var map = new maptalks.Map("map", {
+      center: {
+        x: 113.74250177308274,
+        y: 23.019779407242698
+      },
+      zoom: 15,
+      baseLayer: new maptalks.TileLayer('tile', {
+        urlTemplate: 'http://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer/tile/{z}/{y}/{x}',
+        subdomains: ['1', '2', '3', '4', '5']
+      })
+    });
+
+    var count = 3;
+    var fills = ['#f00', '#0f0', '#00f'];
+
+    var items = [];
+    var layers = [];
+    for (var i = 0; i < count; i++) {
+      var s2;
+      if (i + 1 < 10) {
+        s2 = '0' + (i + 1);
+      } else {
+        s2 = '' + (i + 1);
+      }
+      var id = 'd' + s2;
+      var date = '2016-' + s2;
+      var style = 'style="color:' + fills[i] + '"';
+      items.push({
+        item: '<span ' + style + '>' + date + '</span>',
+        click: noop
+      });
+      layers.push({
+        id: id,
+        type: type,
+        source: {
+          type: 'csv',
+          url: 'maptalks://csv_2016_' + s2
+        },
+        // style: [{
+        //   "symbol": [{
+        //     "markerType": "path",
+        //     "markerPath": [{
+        //       "path": "M8 23l0 0 0 0 0 0 0 0 0 0c-4,-5 -8,-10 -8,-14 0,-5 4,-9 8,-9l0 0 0 0c4,0 8,4 8,9 0,4 -4,9 -8,14z M5,9 a3,3 0,1,0,0,-0.9Z",
+        //       "fill": "#DE3333"
+        //     }],
+        //     "markerPathWidth": 16,
+        //     "markerPathHeight": 23,
+        //     "markerWidth": 32,
+        //     "markerHeight": 46
+        //   }, {
+        //     "textName": "{NAME}",
+        //     "textFaceName": "'microsoft yahei', arial, sans-serif",
+        //     "textSize": 12,
+        //     "textFill": "#000000",
+        //     "textOpacity": 1
+        //   }]
+        // }]
+        style: {
+          symbol: {
+            markerType: 'ellipse',
+            markerFill: fills[i],
+            markerWidth: 14 + 5 * i,
+            markerHeight: 14 + 5 * i
+          }
+        }
+      });
+    }
+
+    var toolbar = new maptalks.control.Toolbar({
+      position: 'top-left',
+      items: items
+    });
+    map.addControl(toolbar);
+
+    var d = new maptalks.DynamicLayer('d', {
+      baseUrl: 'http://sghapp35:8090/maps',
+      // baseUrl: 'http://localhost:7001/maps',
+      layers: layers
+    });
+    map.addLayer(d);
+
+  </script>
+</body>
+
+</html>
