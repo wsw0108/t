@@ -63,31 +63,31 @@
       })
     });
 
-    var count = 3;
-    var fills = ['#f00', '#0f0', '#00f'];
+    var channels = [
+      '百度', '大众点评', '电话订餐', '电脑网页', '饿了么', '美团',
+      '商宴通', '手机APP', '手机网页', '淘点点', '小秘书'
+    ];
+    var count = channels.length;
+    var fills = [
+      '#00CED1', '#ffcc00', '#404040', '#990033', '#9b80ff', '#1E90FF',
+      '#0033cc', '#ccffcc', '#00b300', '#cc3300', '#805500'];
 
     var items = [];
     var layers = [];
     for (var i = 0; i < count; i++) {
-      var s2;
-      if (i + 1 < 10) {
-        s2 = '0' + (i + 1);
-      } else {
-        s2 = '' + (i + 1);
-      }
-      var id = 'd' + s2;
-      var date = '2016-' + s2;
+      var channel = channels[i];
       var style = 'style="color:' + fills[i] + '"';
       items.push({
-        item: '<span ' + style + '>' + date + '</span>',
+        item: '<span ' + style + '>' + channel + '</span>',
         click: noop
       });
       layers.push({
-        id: id,
+        id: 'through_' + channel,
         type: type,
         source: {
           type: 'csv',
-          url: 'maptalks://csv_2016_' + s2
+          url: 'maptalks://csv_2016_01',
+          filter: ['==', 'CHANNEL', channel]
         },
         // style: [{
         //   "symbol": [{
