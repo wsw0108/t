@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>maptalks-256</title>
+
+  <link rel="stylesheet" href="maptalks/maptalks.css" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="css/screen.css" />
+
+  <script src="maptalks/maptalks.js"></script>
+</head>
+
+<body>
+
+  <div id="map"></div>
+
+  <script>
+
+    var tileSize = 256;
+
+    var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      osmAttrib = '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      osm = new maptalks.TileLayer('osm', {
+        urlTemplate: osmUrl,
+        subdomains: ['a', 'b', 'c'],
+        tileSize: [tileSize, tileSize]
+      });
+
+    var map = new maptalks.Map('map', {
+      center: [-0.09, 51.505],
+      zoom: 13,
+      baseLayer: osm,
+      attribution: {
+        content: osmAttrib
+      }
+    });
+
+    var layer = new maptalks.VectorLayer('layer');
+    layer.addTo(map);
+
+    var marker = new maptalks.Marker([-0.09, 51.5]);
+    marker.addTo(layer);
+
+    function onMapClick(e) {
+    }
+
+    map.on('click', onMapClick);
+
+  </script>
+</body>
+
+</html>
