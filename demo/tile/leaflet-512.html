@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Leaflet-512</title>
+
+  <link rel="stylesheet" href="leaflet/leaflet.css" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="css/screen.css" />
+
+  <script src="leaflet/leaflet-src.js"></script>
+</head>
+
+<body>
+
+  <div id="map"></div>
+
+  <script>
+
+    var tileSize = 512;
+
+    var crs = L.extend({}, L.CRS.EPSG3857, {
+      scale: function (zoom) {
+        return tileSize * Math.pow(2, zoom);
+      },
+      zoom: function (scale) {
+        return Math.log(scale / tileSize) / Math.LN2;
+      }
+    });
+
+    var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      osmAttrib = '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      osm = L.tileLayer(osmUrl, {
+        maxZoom: 18,
+        attribution: osmAttrib,
+        tileSize: tileSize
+      });
+
+    var map = L.map('map', {crs: crs})
+      .setView([51.505, -0.09], 13)
+      .addLayer(osm);
+
+    L.marker([51.5, -0.09]).addTo(map)
+      .bindPopup("<b>Hello world!</b><br />I am a popup.").openPopup();
+
+    var popup = L.popup();
+
+    function onMapClick(e) {
+      popup
+        .setLatLng(e.latlng)
+        .setContent("You clicked the map at " + e.latlng.toString())
+        .openOn(map);
+    }
+
+    map.on('click', onMapClick);
+
+  </script>
+</body>
+
+</html>
