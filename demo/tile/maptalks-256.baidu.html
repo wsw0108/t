@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>MapTalks-256</title>
+  <title>MapTalks-256.Baidu</title>
 
   <link rel="stylesheet" href="maptalks/maptalks.css" />
 
@@ -21,31 +21,33 @@
 
     var tileSize = 256;
 
-    var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      osmAttrib = '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      osm = new maptalks.TileLayer('osm', {
-        urlTemplate: osmUrl,
-        subdomains: ['a', 'b', 'c'],
+    var tileUrl = 'http://online{s}.map.bdimg.com/onlinelabel/?qt=tile&x={x}&y={y}&z={z}&styles=pl&scaler=1&p=1',
+      tileAttrib = '&copy; <a href="http://map.baidu.com/">Baidu</a>',
+      tileLayer = new maptalks.TileLayer('baidu', {
+        urlTemplate: tileUrl,
+        subdomains: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
         tileSize: [tileSize, tileSize]
       });
 
     var map = new maptalks.Map('map', {
-      center: [-0.09, 51.505],
+      spatialReference: {
+        projection: 'BAIDU'
+      },
+      center: [121, 31],
       zoom: 13,
-      baseLayer: osm,
+      baseLayer: tileLayer,
       attribution: {
-        content: osmAttrib
+        content: tileAttrib
       }
     });
 
     var layer = new maptalks.VectorLayer('layer');
     layer.addTo(map);
 
-    var marker = new maptalks.Marker([-0.09, 51.5]);
+    var marker = new maptalks.Marker([121, 30.996]);
     marker.addTo(layer);
 
-    function onMapClick(e) {
-    }
+    function onMapClick(e) {}
 
     map.on('click', onMapClick);
 
