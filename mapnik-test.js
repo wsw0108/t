@@ -1,6 +1,6 @@
 var mapnik = require('mapnik');
 var fs = require('fs');
-var sm = require('sphericalmercator');
+var sm = require('@mapbox/sphericalmercator');
 
 mapnik.Logger.setSeverity(mapnik.Logger.DEBUG);
 
