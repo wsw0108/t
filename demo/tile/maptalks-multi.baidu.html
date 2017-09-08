@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>MapTalks-Multi.Baidu</title>
+
+  <link rel="stylesheet" href="maptalks/maptalks.css" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="css/multi.css" />
+
+  <script src="maptalks/maptalks.js"></script>
+  <script src="js/create.js"></script>
+  <script src="js/bbox.js"></script>
+</head>
+
+<body>
+
+  <div class="map" id="map256"></div>
+  <div class="map" id="map512"></div>
+  <div class="map" id="map512-no-srs"></div>
+
+  <script>
+
+    var urlTemplate = 'http://online{s}.map.bdimg.com/onlinelabel/?qt=tile&x={x}&y={y}&z={z}&styles=pl&scaler=1&p=1';
+    var subdomains = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    var attribution = '&copy; <a href="http://map.baidu.com/">Baidu</a>';
+    var srs = {
+      projection: 'BAIDU'
+    };
+    var params = {
+      urlTemplate,
+      subdomains,
+      attribution,
+      srs
+    };
+
+    var srs512 = {
+      projection: 'BAIDU',
+      resolutions: (function () {
+        const result = [];
+        var tileSize = 512;
+        let res = Math.pow(2, 18)
+        res = res * 256 / tileSize;
+        for (let i = 0; i < 20; i++) {
+          result[i] = res
+          res *= 0.5
+        }
+        return result;
+      })()
+    };
+
+    var map256 = createMap('map256', Object.assign({}, params, { tileSize: 256 }));
+    var map512 = createMap('map512', Object.assign({}, params, { tileSize: 512, srs: srs512 }));
+    var map512_no_srs = createMap('map512-no-srs', Object.assign({}, params, { tileSize: 512 }));
+
+    var maps = [map256, map512, map512_no_srs];
+    var sizes = [256, 512, 512];
+
+    function onMapClick(e) {
+    }
+
+    maps.forEach(function (map, i) {
+      var layer = new maptalks.VectorLayer('layer');
+      layer.addTo(map);
+      var marker = new maptalks.Marker([121, 30.996]);
+      marker.addTo(layer);
+      map.on('click', onMapClick);
+      // bufSize: 64px
+      bbox(1, 1, 3, 64, map, sizes[i]);
+    });
+
+  </script>
+</body>
+
+</html>
