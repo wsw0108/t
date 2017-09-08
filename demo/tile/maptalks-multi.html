@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>MapTalks-256</title>
+  <title>MapTalks-Multi</title>
 
   <link rel="stylesheet" href="maptalks/maptalks.css" />
 
@@ -27,18 +27,19 @@
       projection: 'EPSG:3857',
       resolutions: (function () {
         const result = [];
+        const tileSize = 512;
         const d = 2 * 6378137 * Math.PI;
         for (let i = 0; i < 20; i++) {
-          result[i] = d / (512 * Math.pow(2, i));
+          result[i] = d / (tileSize * Math.pow(2, i));
           // unit: meter/pixel
         }
         return result;
       })()
     };
 
-    var map256 = createMap('map256', 256);
-    var map512 = createMap('map512', 512, srs512);
-    var map512_no_srs = createMap('map512-no-srs', 512);
+    var map256 = createMap('map256', { tileSize: 256 });
+    var map512 = createMap('map512', { tileSize: 512, srs: srs512 });
+    var map512_no_srs = createMap('map512-no-srs', { tileSize: 512 });
 
     var maps = [map256, map512, map512_no_srs];
     var sizes = [256, 512, 512];
