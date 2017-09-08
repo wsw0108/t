@@ -7,7 +7,8 @@ function bbox(x, y, z, bufSize, map, tileSize) {
   var res = srs.getResolution(z);
   var extent = tc.getTilePrjExtent(x, y, res);
   bufSize = bufSize || 0;
-  extent._expand(bufSize);
+  var distance = bufSize * res;
+  extent._expand(distance);
   var sw = proj.unproject(extent.getMin());
   var ne = proj.unproject(extent.getMax());
   console.log(`bbox, z: ${z}, x: ${x}, y: ${y}`);
