@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>MapTalks-256</title>
+
+  <link rel="stylesheet" href="maptalks/maptalks.css" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="css/multi.css" />
+
+  <script src="maptalks/maptalks.js"></script>
+  <script src="js/create.js"></script>
+  <script src="js/bbox.js"></script>
+</head>
+
+<body>
+
+  <div class="map" id="map256"></div>
+  <div class="map" id="map512"></div>
+  <div class="map" id="map512-no-srs"></div>
+
+  <script>
+
+    var srs512 = {
+      projection: 'EPSG:3857',
+      resolutions: (function () {
+        const result = [];
+        const d = 2 * 6378137 * Math.PI;
+        for (let i = 0; i < 20; i++) {
+          result[i] = d / (512 * Math.pow(2, i));
+          // unit: meter/pixel
+        }
+        return result;
+      })()
+    };
+
+    var map256 = createMap('map256', 256);
+    var map512 = createMap('map512', 512, srs512);
+    var map512_no_srs = createMap('map512-no-srs', 512);
+
+    var maps = [map256, map512, map512_no_srs];
+    var sizes = [256, 512, 512];
+
+    function onMapClick(e) {
+    }
+
+    maps.forEach(function (map, i) {
+      var layer = new maptalks.VectorLayer('layer');
+      layer.addTo(map);
+      var marker = new maptalks.Marker([121, 30.996]);
+      marker.addTo(layer);
+      map.on('click', onMapClick);
+      bbox(1, 1, 3, 64, map, sizes[i]);
+    });
+
+  </script>
+</body>
+
+</html>
