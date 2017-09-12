@@ -45,6 +45,28 @@
     marker.addTo(layer);
 
     function onMapClick(e) {
+      // marker所在瓦片编号(从地图上看)
+      const [z, x, y] = [13, 4093, 2724];
+      const bufSize = 0; // px
+
+      // getTileConfig
+      const size = tileSize || 256;
+      const srs = map.getSpatialReference();
+      const projection = srs.getProjection();
+      const tileSystem = maptalks.TileSystem.getDefault(projection);
+      const fullExtent = srs.getFullExtent();
+      const tileConfig = new maptalks.TileConfig(tileSystem, fullExtent, new maptalks.Size(size, size));
+
+      // tileCoordToExtent
+      const res = srs.getResolution(z);
+      const distance = bufSize * res;
+      const extent = tileConfig.getTilePrjExtent(x, y, res);
+      extent._expand(distance);
+      const sw = projection.unproject(extent.getMin());
+      const ne = projection.unproject(extent.getMax());
+      const unprojected = new maptalks.Extent(sw, ne);
+
+      console.log(`marker in extent: ${unprojected.contains(marker.getCoordinates())}`);
     }
 
     map.on('click', onMapClick);
