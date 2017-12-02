@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>stencil test</title>
+  <style>
+    #canvas {
+      border: 2px solid black
+    }
+  </style>
+  <script src="./utils-browser.js"></script>
+</head>
+
+<body>
+  <canvas id="canvas" width="400" height="300"></canvas>
+  <script>
+    const c = document.getElementById('canvas')
+    const gl = c.getContext('webgl', {
+      stencil: true // oh shit
+    })
+
+    const vertexSrc = '' +
+    '\nattribute vec2 a_pos;' +
+    '\nvoid main() {' +
+      '\ngl_Position = vec4(a_pos, 0, 1);' +
+    '\n}'
+
+    const fragmentSrc = '' +
+    '\nprecision mediump float;' +
+    '\nuniform vec4 u_color;' +
+    '\nvoid main() {' +
+      '\ngl_FragColor = u_color;' +
+    '\n}'
+
+    const program = createProgramFromSources(gl, [vertexSrc, fragmentSrc])
+    gl.useProgram(program)
+
+    function setup() {
+      gl.enable(gl.STENCIL_TEST)
+
+      gl.enable(gl.BLEND)
+      gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA)
+
+      gl.enable(gl.DEPTH_TEST)
+      gl.depthFunc(gl.LEQUAL)
+    }
+
+    function clear() {
+      clearColor()
+      clearStencil()
+      clearDepth()
+    }
+
+    function clearColor() {
+        gl.clearColor(0, 0, 0, 0)
+        gl.colorMask(true, true, true, true)
+        gl.clear(gl.COLOR_BUFFER_BIT)
+    }
+
+    function clearStencil() {
+        gl.clearStencil(0x0)
+        gl.stencilMask(0xFF)
+        gl.clear(gl.STENCIL_BUFFER_BIT)
+    }
+
+    function clearDepth() {
+        gl.clearDepth(1)
+        gl.depthMask(true)
+        gl.clear(gl.DEPTH_BUFFER_BIT)
+    }
+
+    function beforeWriteToStencilBuffer(writeColor) {
+      // gl.colorMask(false, false, false, false)
+
+      gl.depthMask(false)
+      gl.disable(gl.DEPTH_TEST)
+
+      gl.enable(gl.STENCIL_TEST)
+      gl.stencilMask(0xFF)
+      gl.stencilOp(gl.KEEP, gl.KEEP, gl.REPLACE)
+    }
+
+    function afterWriteToStencilBuffer() {
+      gl.stencilMask(0x00)
+      gl.colorMask(true, true, true, true)
+      gl.depthMask(true)
+      gl.enable(gl.DEPTH_TEST)
+    }
+
+    function drawMask(rect, color, ref) {
+      gl.stencilFunc(gl.ALWAYS, ref, 0xFF)
+      const a_pos = gl.getAttribLocation(program, 'a_pos')
+      const buffer = gl.createBuffer()
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
+      gl.bufferData(gl.ARRAY_BUFFER, rect, gl.STATIC_DRAW)
+      gl.enableVertexAttribArray(a_pos)
+      gl.vertexAttribPointer(a_pos, 2, gl.FLOAT, false, 0, 0)
+      const u_color = gl.getUniformLocation(program, 'u_color')
+      gl.uniform4fv(u_color, color)
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)
+      gl.deleteBuffer(buffer)
+    }
+
+    function drawMasks() {
+      beforeWriteToStencilBuffer()
+
+      const rectLeft = new Float32Array([
+        -1.0, -1.0,
+        0.0, -1.0,
+        -1.0, 1.0,
+        0.0, 1.0,
+      ])
+      const colorLeft = [1, 0, 0, 1] // red
+      const refLeft = 1
+      drawMask(rectLeft, colorLeft, refLeft)
+
+      const rectRight = new Float32Array([
+        0.0, 1.0,
+        1.0, 1.0,
+        0.0, -1.0,
+        1.0, -1.0,
+      ])
+      const colorRight = [0, 1, 0, 1] // green
+      const refRight = 2
+      drawMask(rectRight, colorRight, refRight)
+
+      afterWriteToStencilBuffer()
+    }
+
+    function drawFill(color, ref) {
+      const rect = new Float32Array([
+        -0.5, -0.5,
+        0.5, -0.5,
+        0.5, 0.5,
+        -0.5, -0.5,
+        0.5, 0.5,
+        -0.5, 0.5,
+      ])
+      gl.stencilFunc(gl.EQUAL, ref, 0xFF)
+      const a_pos = gl.getAttribLocation(program, 'a_pos')
+      const buffer = gl.createBuffer()
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
+      gl.bufferData(gl.ARRAY_BUFFER, rect, gl.STATIC_DRAW)
+      gl.enableVertexAttribArray(a_pos)
+      gl.vertexAttribPointer(a_pos, 2, gl.FLOAT, false, 0, 0)
+      const u_color = gl.getUniformLocation(program, 'u_color')
+      gl.uniform4fv(u_color, color)
+      gl.drawArrays(gl.TRIANGLES, 0, 6)
+      gl.deleteBuffer(buffer)
+    }
+
+    function drawFills() {
+      const refLeft = 1
+      const colorLeft = [0, 0, 1, 1] // blue
+      drawFill(colorLeft, refLeft)
+
+      const refRight = 2
+      const colorRight = [0.5, 0.5, 0.5, 1]
+      drawFill(colorRight, refRight)
+    }
+
+    setup()
+    clear()
+    drawMasks()
+    drawFills()
+
+  </script>
+</body>
+
+</html>
