@@ -2014,7 +2014,7 @@
     function toFixed(f, n) {
       var s = f.toString()
       var p = s.indexOf('.')
-      return parseFloat(s.substring(0, p + 7))
+      return parseFloat(s.substring(0, p + 1 + n))
     }
 
     var geojsonConverted6 = {
@@ -2024,17 +2024,46 @@
     geojsonConverted.coordinates[0].forEach(coord => {
       geojsonConverted6.coordinates[0].push([toFixed(coord[0], 6), toFixed(coord[1], 6)])
     })
-    console.log(geojsonConverted6)
+
+    var geojsonGiven6 = {
+      "type": "Polygon",
+      "coordinates": [[]]
+    }
+    geojsonGiven.coordinates[0].forEach(coord => {
+      geojsonGiven6.coordinates[0].push([toFixed(coord[0], 6), toFixed(coord[1], 6)])
+    })
+
+    for (var i = 0; i < geojsonConverted6.coordinates[0].length; i++) {
+      var coord1 = geojsonConverted6.coordinates[0][i]
+      var coord2 = geojsonGiven6.coordinates[0][i]
+      if (coord1[0] !== coord2[0] || coord1[1] !== coord2[1]) {
+        console.log(`${i}, ${coord1}, ${coord2}`)
+      }
+    }
+
+    var geojsonHuangshi6 = {
+      "type": "Polygon",
+      "coordinates": [[]]
+    }
+    geojsonHuangshi.coordinates[0].forEach(coord => {
+      geojsonHuangshi6.coordinates[0].push([toFixed(coord[0], 6), toFixed(coord[1], 6)])
+    })
 
     var reader = new jsts.io.GeoJSONReader()
 
     var geomConverted = reader.read(geojsonConverted)
     var geomConverted6 = reader.read(geojsonConverted6)
     var geomGiven = reader.read(geojsonGiven)
+    var geomGiven6 = reader.read(geojsonGiven6)
     var geomHuangshi = reader.read(geojsonHuangshi)
-    alert(`huangshi contains rest converted: ${geomHuangshi.contains(geomConverted)}`)
-    alert(`huangshi contains rest converted6: ${geomHuangshi.contains(geomConverted6)}`)
-    alert(`huangshi contains wangjun given: ${geomHuangshi.contains(geomGiven)}`)
+    var geomHuangshi6 = reader.read(geojsonHuangshi6)
+    console.log(`huangshi contains rest converted: ${geomHuangshi.contains(geomConverted)}`)
+    console.log(`huangshi contains rest converted6: ${geomHuangshi.contains(geomConverted6)}`)
+    console.log(`huangshi contains wangjun given: ${geomHuangshi.contains(geomGiven)}`)
+    console.log(`huangshi contains wangjun given6: ${geomHuangshi.contains(geomGiven6)}`)
+
+    console.log(`huangshi6 contains rest converted6: ${geomHuangshi6.contains(geomConverted6)}`)
+    console.log(`huangshi6 contains wangjun given6: ${geomHuangshi6.contains(geomGiven6)}`)
 
     var polygonConverted = maptalks.GeoJSON.toGeometry(geojsonConverted)
     var polygonGiven = maptalks.GeoJSON.toGeometry(geojsonGiven)
