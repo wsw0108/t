@@ -2011,13 +2011,30 @@
       ]
     }
 
+    function toFixed(f, n) {
+      var s = f.toString()
+      var p = s.indexOf('.')
+      return parseFloat(s.substring(0, p + 7))
+    }
+
+    var geojsonConverted6 = {
+      "type": "Polygon",
+      "coordinates": [[]]
+    }
+    geojsonConverted.coordinates[0].forEach(coord => {
+      geojsonConverted6.coordinates[0].push([toFixed(coord[0], 6), toFixed(coord[1], 6)])
+    })
+    console.log(geojsonConverted6)
+
     var reader = new jsts.io.GeoJSONReader()
 
     var geomConverted = reader.read(geojsonConverted)
+    var geomConverted6 = reader.read(geojsonConverted6)
     var geomGiven = reader.read(geojsonGiven)
     var geomHuangshi = reader.read(geojsonHuangshi)
-    console.log(`huangshi contains rest converted: ${geomHuangshi.contains(geomConverted)}`)
-    console.log(`huangshi contains wangjun given: ${geomHuangshi.contains(geomGiven)}`)
+    alert(`huangshi contains rest converted: ${geomHuangshi.contains(geomConverted)}`)
+    alert(`huangshi contains rest converted6: ${geomHuangshi.contains(geomConverted6)}`)
+    alert(`huangshi contains wangjun given: ${geomHuangshi.contains(geomGiven)}`)
 
     var polygonConverted = maptalks.GeoJSON.toGeometry(geojsonConverted)
     var polygonGiven = maptalks.GeoJSON.toGeometry(geojsonGiven)
